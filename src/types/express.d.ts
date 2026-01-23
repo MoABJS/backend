@@ -1,11 +1,12 @@
-interface User {
-  firstName: string;
-  lastName: string;
-  email: string;
-}
+import { AuthPayload } from "./auth"; // adjust path to your AuthPayload
 
-declare namespace Express {
-  interface Request {
-    user?: User | null;
+declare global {
+  namespace Express {
+    interface Request {
+      user?: AuthPayload;
+    }
   }
 }
+
+
+export {};

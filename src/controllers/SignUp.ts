@@ -24,7 +24,7 @@ const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
 
     const encryptedPassword = await bcrypt.hash(password, 10);
 
-    console.log("e. password", encryptedPassword);
+    // console.log("e. password", encryptedPassword);
 
     const newUser = new userModel({
       firstName,
@@ -39,7 +39,7 @@ const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
       ...user.toObject(),
       password: undefined,
     };
-    console.log("New user created: ", user);
+    // console.log("New user created: ", user);
     return res.status(StatusCodes.CREATED).json({
       success: true,
       message: "New user created",

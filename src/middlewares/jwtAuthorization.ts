@@ -34,8 +34,8 @@ const jwtAuthorization = async (
         .json({ success: false, message: "Invalid token" });
     }
 
-    const user = await userModel.findById(jwtToken.userId).select("-password");
-    req.user = user;
+    // const user = await userModel.findById(jwtToken.userId).select("-password");
+    req.user = jwtToken;
 
     next();
   } catch (error) {

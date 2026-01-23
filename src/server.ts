@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser"
 
 dotenv.config();
 
@@ -9,13 +10,15 @@ import SignIn from "./controllers/SignIn";
 import userSignUpValidation from "./validators/userSignUpValidation";
 import validate from "./middlewares/validate";
 import userSignInValidation from "./validators/userSignInValidation";
+import jwtAuthorization from "./middlewares/jwtAuthorization";
 
 export const app = express();
 
 app.use(express.json());
+app.use(cookieParser())
 
 connectToDB();
-app.get("/", (req, res) => {
+app.get("/", jwtAuthorization, (req, res) => {
   res.send("Hello there, just start");
 });
 
