@@ -16,8 +16,10 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
     },
+    googleId: {
+      type: String,
+    }
   },
   { versionKey: false, timestamps: true }
 );

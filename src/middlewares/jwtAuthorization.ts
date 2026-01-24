@@ -36,6 +36,7 @@ const jwtAuthorization = async (
 
     // const user = await userModel.findById(jwtToken.userId).select("-password");
     req.user = jwtToken;
+    console.log("user", req.user)
 
     next();
   } catch (error) {

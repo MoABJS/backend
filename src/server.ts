@@ -5,12 +5,9 @@ dotenv.config();
 
 import express from "express";
 import connectToDB from "./config/mongodb";
-import SignUp from "./controllers/SignUp";
-import SignIn from "./controllers/SignIn";
-import userSignUpValidation from "./validators/userSignUpValidation";
-import validate from "./middlewares/validate";
-import userSignInValidation from "./validators/userSignInValidation";
-import jwtAuthorization from "./middlewares/jwtAuthorization";
+import routes from "./routes/routes";
+import passport from "passport";
+import "./config/google_passport"
 
 export const app = express();
 
@@ -18,12 +15,9 @@ app.use(express.json());
 app.use(cookieParser())
 
 connectToDB();
-app.get("/", jwtAuthorization, (req, res) => {
-  res.send("Hello there, just start");
-});
 
-app.post("/sign-up", userSignUpValidation, validate, SignUp);
-app.post("/sign-in", userSignInValidation, validate, SignIn);
+app.use("/api", routes)
+app.use(passport.initialize())
 
 const PORT = process.env.PORT;
 

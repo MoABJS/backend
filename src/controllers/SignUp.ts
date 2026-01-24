@@ -7,7 +7,8 @@ interface SignUpBody {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string;
+  googleId?: string
 }
 
 const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
@@ -22,7 +23,7 @@ const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
         .json({ success: false, message: "User already exist" });
     }
 
-    const encryptedPassword = await bcrypt.hash(password, 10);
+    const encryptedPassword = await bcrypt.hash(password!, 10);
 
     // console.log("e. password", encryptedPassword);
 

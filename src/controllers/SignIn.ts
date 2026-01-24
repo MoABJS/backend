@@ -21,7 +21,7 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
       });
     }
 
-    const isPasswordMatch = await bcrypt.compare(password, isUser?.password);
+    const isPasswordMatch = await bcrypt.compare(password, isUser?.password!);
 
     if (!isPasswordMatch) {
       return res.status(StatusCodes.NOT_FOUND).json({
