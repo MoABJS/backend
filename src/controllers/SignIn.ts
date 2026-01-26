@@ -30,6 +30,10 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
       });
     }
 
+    if (!isUser.isVerified) {
+      return res.status(StatusCodes.FORBIDDEN).json({success: false, message: "Please verify your email before logging in"})
+    }
+
     const token = jwt.sign(
       { userId: isUser._id },
       process.env.JWT_SECRET_KEY!,

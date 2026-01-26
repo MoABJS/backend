@@ -8,6 +8,7 @@ import jwtAuthorization from "../middlewares/jwtAuthorization";
 import passport from "passport";
 import jwt from "jsonwebtoken"
 import SignOut from "../controllers/SignOut";
+import VerifyEmail from "../controllers/VerifyEmail";
 
 const router = Router()
 
@@ -17,6 +18,7 @@ router.get("/", jwtAuthorization, (_req, res) => {
 });
 router.post("/sign-up", userSignUpValidation, validate, SignUp)
 router.post("/sign-in", userSignInValidation, validate, SignIn)
+router.get("/auth/verify-email", VerifyEmail)
 router.get("/sign-out", jwtAuthorization, SignOut)
 
 router.get(

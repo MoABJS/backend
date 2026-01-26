@@ -44,6 +44,7 @@ passport.use(
           email,
           googleId,
           password: undefined, // no password for Google users
+          isVerified: true
         });
 
         return done(null, newUser);
