@@ -21,7 +21,18 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
       });
     }
 
+    console.log("isUser", isUser)
+
+    if (!isUser.password) {
+  return res.status(StatusCodes.BAD_REQUEST).json({
+    success: false,
+    message: "This account uses Google sign-in. Please sign in with Google.",
+  });
+}
+
     const isPasswordMatch = await bcrypt.compare(password, isUser?.password!);
+
+    console.log("ispassword", isPasswordMatch)
 
     if (!isPasswordMatch) {
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -41,10 +52,11 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
         expiresIn: "1d",
       }
     );
+    console.log("token before", token)
 
     res.cookie("token", token, {
       httpOnly: true,
-      // sameSite: "strict",
+      sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
       maxAge: 24 * 60 * 60 * 1000,
     });

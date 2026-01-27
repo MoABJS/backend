@@ -31,6 +31,7 @@ passport.use(
           // If user exists but has no googleId yet, link it
           if (!user.googleId) {
             user.googleId = googleId;
+            user.provider = "local+google";
             await user.save();
           }
 
@@ -44,7 +45,8 @@ passport.use(
           email,
           googleId,
           password: undefined, // no password for Google users
-          isVerified: true
+          isVerified: true,
+          provider: "google"
         });
 
         return done(null, newUser);

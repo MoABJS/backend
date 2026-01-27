@@ -5,7 +5,7 @@ import { AuthPayload } from "../types/auth";
 const SignOut = (req: Request, res: Response) => {
     try {
         const user = req.user
-        // console.log("before", user)
+        console.log("before", user)
 
         if (!user) {
             return res.status(StatusCodes.NOT_FOUND).json({ success: false, message: "You are not signed In" })
@@ -13,11 +13,9 @@ const SignOut = (req: Request, res: Response) => {
 
     res.clearCookie("token", {
       httpOnly: true,
-      // sameSite: "strict",
+      sameSite: "strict",
       secure: process.env.NODE_ENV === "production",
-      maxAge: 24 * 60 * 60 * 1000,
     })
-    req.user = undefined;
     // console.log("after", user)
     return res.status(StatusCodes.OK).json({success: true, message: "You have logged out successfully"
 

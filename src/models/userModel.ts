@@ -29,6 +29,13 @@ const userSchema = new mongoose.Schema(
     },
     verificationTokenExpires: {
       type: Date
+    }, 
+    provider: {
+      type: String,
+      enum: {
+        values: ["local", "google", "local+google"],
+        message: "{VALUE} is not a valid provider"
+      }
     }
   },
   { versionKey: false, timestamps: true }

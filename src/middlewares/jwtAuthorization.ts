@@ -15,6 +15,8 @@ const jwtAuthorization = async (
   try {
     const token = req.cookies.token;
 
+    console.log("token after", token)
+
     const accessToken = token;
 
     if (!accessToken) {
@@ -27,6 +29,8 @@ const jwtAuthorization = async (
       accessToken,
       process.env.JWT_SECRET_KEY!
     ) as AuthPayload;
+
+    console.log("jwt", jwtToken)
 
     if (!jwtToken) {
       return res

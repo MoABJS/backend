@@ -19,7 +19,7 @@ router.get("/", jwtAuthorization, (_req, res) => {
 router.post("/sign-up", userSignUpValidation, validate, SignUp)
 router.post("/sign-in", userSignInValidation, validate, SignIn)
 router.get("/auth/verify-email", VerifyEmail)
-router.get("/sign-out", jwtAuthorization, SignOut)
+router.post("/sign-out", jwtAuthorization, SignOut)
 
 router.get(
   "/auth/google",

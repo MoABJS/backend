@@ -14,6 +14,7 @@ interface SignUpBody {
   isVerified: boolean;
   verificationToken?: string,
   verificationTokenExpires?: Date;
+  provider?: string;
 }
 
 const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
@@ -22,17 +23,25 @@ const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
 
     const existingUser = await userModel.findOne({ email });
 
-    if (existingUser) {
+    if (existingUser?.provider === "google") {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        code: "GOOGLE_ACCOUNT_EXISTS",
+      message: "This email is registered using Google. Please sign in with Google."
+      })
+    }
+
+    if (existingUser?.provider === "local" || existingUser?.provider === "local+google" ) {
       return res
         .status(StatusCodes.UNAUTHORIZED)
-        .json({ success: false, message: "User already exist" });
+        .json({ code: "EMAIL_ACCOUNT_EXISTS",
+      message: "An account with this email already exists. Please log in." });
     }
 
     const encryptedPassword = await bcrypt.hash(password!, 10);
     const verificationToken = crypto.randomBytes(32).toString("hex")
     console.log("verificationToken", verificationToken)
 
-    // console.log("e. password", encryptedPassword);
+    // console.log("e. password", encryptedPassword)
 
     const newUser = new userModel({
       firstName,
@@ -41,7 +50,8 @@ const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
       password: encryptedPassword,
       isVerified: false,
       verificationToken,
-      verificationTokenExpires: new Date(Date.now() + 24 * 60 * 60 * 1000)
+      verificationTokenExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      provider: "local"
     });
 
      await newUser.save();
