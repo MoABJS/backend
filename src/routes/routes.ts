@@ -6,27 +6,30 @@ import userSignUpValidation from "../validators/userSignUpValidation";
 import SignUp from "../controllers/SignUp";
 import jwtAuthorization from "../middlewares/jwtAuthorization";
 import passport from "passport";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import SignOut from "../controllers/SignOut";
 import VerifyEmail from "../controllers/VerifyEmail";
+import getPosts from "../controllers/GetPosts";
+import addPosts from "../controllers/AddPosts";
 
-const router = Router()
+const router = Router();
 
-
-router.get("/", jwtAuthorization, (_req, res) => {
+router.get("/", (_req, res) => {
   res.send("Hello there, just start");
 });
-router.post("/sign-up", userSignUpValidation, validate, SignUp)
-router.post("/sign-in", userSignInValidation, validate, SignIn)
-router.get("/auth/verify-email", VerifyEmail)
-router.post("/sign-out", jwtAuthorization, SignOut)
+router.get("/posts", jwtAuthorization, getPosts);
+router.post("/sign-up", userSignUpValidation, validate, SignUp);
+router.post("/sign-in", userSignInValidation, validate, SignIn);
+router.get("/auth/verify-email", VerifyEmail);
+router.post("/sign-out", jwtAuthorization, SignOut);
+router.post("/add-post", jwtAuthorization, addPosts);
 
 router.get(
   "/auth/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
     session: false,
-  })
+  }),
 );
 
 router.get(
@@ -39,11 +42,9 @@ router.get(
     const user = req.user as any;
 
     // Create JWT
-    const token = jwt.sign(
-      { userId: user._id },
-      process.env.JWT_SECRET_KEY!,
-      { expiresIn: "1d" }
-    );
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY!, {
+      expiresIn: "1d",
+    });
 
     // Send token as cookie (recommended)
     res.cookie("token", token, {
@@ -55,7 +56,7 @@ router.get(
 
     // Or redirect to frontend
     res.redirect("http://localhost:3000/api"); // your frontend URL
-  }
+  },
 );
 
-export default router
+export default router;

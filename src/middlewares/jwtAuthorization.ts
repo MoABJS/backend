@@ -1,21 +1,22 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
+import { AuthPayload } from "../types/auth";
 import userModel from "../models/userModel";
 
-interface AuthPayload {
-  userId: string;
-}
+// interface AuthPayload {
+//   userId: string;
+// }
 
 const jwtAuthorization = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const token = req.cookies.token;
 
-    console.log("token after", token)
+    console.log("token after", token);
 
     const accessToken = token;
 
@@ -27,10 +28,10 @@ const jwtAuthorization = async (
 
     const jwtToken = jwt.verify(
       accessToken,
-      process.env.JWT_SECRET_KEY!
+      process.env.JWT_SECRET_KEY!,
     ) as AuthPayload;
 
-    console.log("jwt", jwtToken)
+    console.log("jwt", jwtToken);
 
     if (!jwtToken) {
       return res
@@ -40,7 +41,7 @@ const jwtAuthorization = async (
 
     // const user = await userModel.findById(jwtToken.userId).select("-password");
     req.user = jwtToken;
-    console.log("user", req.user)
+    console.log("user", req.user);
 
     next();
   } catch (error) {
