@@ -11,8 +11,11 @@ import SignOut from "../controllers/SignOut";
 import VerifyEmail from "../controllers/VerifyEmail";
 import getPosts from "../controllers/GetPosts";
 import addPosts from "../controllers/AddPosts";
+import postValidation from "../validators/postValidation";
+import multer from "multer";
 
 const router = Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get("/", (_req, res) => {
   res.send("Hello there, just start");
@@ -22,7 +25,14 @@ router.post("/sign-up", userSignUpValidation, validate, SignUp);
 router.post("/sign-in", userSignInValidation, validate, SignIn);
 router.get("/auth/verify-email", VerifyEmail);
 router.post("/sign-out", jwtAuthorization, SignOut);
-router.post("/add-post", jwtAuthorization, addPosts);
+router.post(
+  "/add-post",
+  jwtAuthorization,
+  upload.single("image"),
+  postValidation,
+  validate,
+  addPosts,
+);
 
 router.get(
   "/auth/google",

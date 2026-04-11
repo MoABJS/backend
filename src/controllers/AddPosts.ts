@@ -1,18 +1,23 @@
 import { Response, Request } from "express";
 import postModel from "../models/postModel";
 import { StatusCodes } from "http-status-codes";
+import uploadImage from "../middlewares/uploadImage";
 
 const addPosts = async (req: Request, res: Response) => {
   try {
-    const {
-      itemName,
-      itemDescription,
-      postType,
-      location,
-      date,
-      imageUrl,
-      userId,
-    } = req.body;
+    const { itemName, itemDescription, postType, location, date, userId } =
+      req.body;
+
+    // Upload image to Cloudinary
+
+    if (!req.file) {
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message: "Image file is required",
+      });
+    }
+
+    const imageUrl = await uploadImage(req.file.buffer);
 
     const newPost = new postModel({
       itemName,
