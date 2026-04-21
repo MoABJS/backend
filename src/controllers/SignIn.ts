@@ -21,18 +21,19 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
       });
     }
 
-    console.log("isUser", isUser)
+    console.log("isUser", isUser);
 
     if (!isUser.password) {
-  return res.status(StatusCodes.BAD_REQUEST).json({
-    success: false,
-    message: "This account uses Google sign-in. Please sign in with Google.",
-  });
-}
+      return res.status(StatusCodes.BAD_REQUEST).json({
+        success: false,
+        message:
+          "This account uses Google sign-in. Please sign in with Google.",
+      });
+    }
 
     const isPasswordMatch = await bcrypt.compare(password, isUser?.password!);
 
-    console.log("ispassword", isPasswordMatch)
+    console.log("ispassword", isPasswordMatch);
 
     if (!isPasswordMatch) {
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -42,7 +43,12 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
     }
 
     if (!isUser.isVerified) {
-      return res.status(StatusCodes.FORBIDDEN).json({success: false, message: "Please verify your email before logging in"})
+      return res
+        .status(StatusCodes.FORBIDDEN)
+        .json({
+          success: false,
+          message: "Please verify your email before logging in",
+        });
     }
 
     const token = jwt.sign(
@@ -50,13 +56,13 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
       process.env.JWT_SECRET_KEY!,
       {
         expiresIn: "1d",
-      }
+      },
     );
-    console.log("token before", token)
+    console.log("token before", token);
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "none",
       secure: process.env.NODE_ENV === "production",
       maxAge: 24 * 60 * 60 * 1000,
     });
