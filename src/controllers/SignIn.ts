@@ -43,12 +43,10 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
     }
 
     if (!isUser.isVerified) {
-      return res
-        .status(StatusCodes.FORBIDDEN)
-        .json({
-          success: false,
-          message: "Please verify your email before logging in",
-        });
+      return res.status(StatusCodes.FORBIDDEN).json({
+        success: false,
+        message: "Please verify your email before logging in",
+      });
     }
 
     const token = jwt.sign(
@@ -70,6 +68,13 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Log in successful",
+      user: {
+        userId: isUser.id,
+        email: isUser.email,
+        isVerified: isUser.isVerified,
+        firstName: isUser.firstName,
+        lastName: isUser.lastName,
+      },
     });
   } catch (error) {
     if (error instanceof Error)

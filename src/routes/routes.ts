@@ -13,6 +13,7 @@ import getPosts from "../controllers/GetPosts";
 import addPosts from "../controllers/AddPosts";
 import postValidation from "../validators/postValidation";
 import multer from "multer";
+import getUser from "../controllers/GetUser";
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -23,6 +24,7 @@ router.get("/", (_req, res) => {
 router.get("/posts", jwtAuthorization, getPosts);
 router.post("/sign-up", userSignUpValidation, validate, SignUp);
 router.post("/sign-in", userSignInValidation, validate, SignIn);
+router.get("/current-user", jwtAuthorization, getUser);
 router.get("/auth/verify-email", VerifyEmail);
 router.post("/sign-out", jwtAuthorization, SignOut);
 router.post(
