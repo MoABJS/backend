@@ -21,7 +21,7 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
       });
     }
 
-    console.log("isUser", isUser);
+    // console.log("isUser", isUser);
 
     if (!isUser.password) {
       return res.status(StatusCodes.BAD_REQUEST).json({
@@ -33,7 +33,7 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
 
     const isPasswordMatch = await bcrypt.compare(password, isUser?.password!);
 
-    console.log("ispassword", isPasswordMatch);
+    // console.log("ispassword", isPasswordMatch);
 
     if (!isPasswordMatch) {
       return res.status(StatusCodes.NOT_FOUND).json({
@@ -56,7 +56,7 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
         expiresIn: "1d",
       },
     );
-    console.log("token before", token);
+    // console.log("token before", token);
 
     res.cookie("token", token, {
       httpOnly: true,

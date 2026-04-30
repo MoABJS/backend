@@ -13,6 +13,7 @@ import getPosts from "../controllers/GetPosts";
 import addPosts from "../controllers/AddPosts";
 import postValidation from "../validators/postValidation";
 import multer from "multer";
+import getCurrentUser from "../controllers/GetCurrentUser";
 import getUser from "../controllers/GetUser";
 
 const router = Router();
@@ -24,7 +25,8 @@ router.get("/", (_req, res) => {
 router.get("/posts", jwtAuthorization, getPosts);
 router.post("/sign-up", userSignUpValidation, validate, SignUp);
 router.post("/sign-in", userSignInValidation, validate, SignIn);
-router.get("/current-user", jwtAuthorization, getUser);
+router.get("/current-user", jwtAuthorization, getCurrentUser);
+router.get("/users/:userId", getUser);
 router.get("/auth/verify-email", VerifyEmail);
 router.post("/sign-out", jwtAuthorization, SignOut);
 router.post(

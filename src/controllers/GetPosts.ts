@@ -8,7 +8,7 @@ const getPosts = async (req: Request, res: Response) => {
 
     return res.status(StatusCodes.OK).json({
       success: true,
-      data: posts,
+      posts: posts,
     });
   } catch (error) {
     if (error instanceof Error) {
