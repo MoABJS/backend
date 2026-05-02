@@ -15,6 +15,7 @@ import postValidation from "../validators/postValidation";
 import multer from "multer";
 import getCurrentUser from "../controllers/GetCurrentUser";
 import getUser from "../controllers/GetUser";
+import UpdatePostStatus from "../controllers/UpdatePostStatus";
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage() });
@@ -27,6 +28,7 @@ router.post("/sign-up", userSignUpValidation, validate, SignUp);
 router.post("/sign-in", userSignInValidation, validate, SignIn);
 router.get("/current-user", jwtAuthorization, getCurrentUser);
 router.get("/users/:userId", getUser);
+router.patch("/posts/:id", jwtAuthorization, UpdatePostStatus);
 router.get("/auth/verify-email", VerifyEmail);
 router.post("/sign-out", jwtAuthorization, SignOut);
 router.post(

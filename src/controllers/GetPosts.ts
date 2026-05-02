@@ -6,6 +6,8 @@ const getPosts = async (req: Request, res: Response) => {
   try {
     const posts = await postModel.find();
 
+    console.log("posts to see id", posts);
+
     return res.status(StatusCodes.OK).json({
       success: true,
       posts: posts,
