@@ -31,7 +31,7 @@ const getUser = async (req: Request, res: Response) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        // profile: user.profile
+        profile: user.profile,
       },
     });
   } catch (error) {

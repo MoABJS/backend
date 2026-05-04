@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import userModel from "../models/userModel";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import crypto from "crypto"
+import crypto from "crypto";
 import SendMailVerification from "../utils/sendMailVerification";
 
 interface SignUpBody {
@@ -12,7 +12,7 @@ interface SignUpBody {
   password?: string;
   googleId?: string;
   isVerified: boolean;
-  verificationToken?: string,
+  verificationToken?: string;
   verificationTokenExpires?: Date;
   provider?: string;
 }
@@ -26,20 +26,23 @@ const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
     if (existingUser?.provider === "google") {
       return res.status(StatusCodes.BAD_REQUEST).json({
         code: "GOOGLE_ACCOUNT_EXISTS",
-      message: "This email is registered using Google. Please sign in with Google."
-      })
+        message: "This user is already registered. Please sign in",
+      });
     }
 
-    if (existingUser?.provider === "local" || existingUser?.provider === "local+google" ) {
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .json({ code: "EMAIL_ACCOUNT_EXISTS",
-      message: "An account with this email already exists. Please log in." });
+    if (
+      existingUser?.provider === "local" ||
+      existingUser?.provider === "local+google"
+    ) {
+      return res.status(StatusCodes.UNAUTHORIZED).json({
+        code: "EMAIL_ACCOUNT_EXISTS",
+        message: "An account with this email already exists. Please log in.",
+      });
     }
 
     const encryptedPassword = await bcrypt.hash(password!, 10);
-    const verificationToken = crypto.randomBytes(32).toString("hex")
-    console.log("verificationToken", verificationToken)
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    console.log("verificationToken", verificationToken);
 
     // console.log("e. password", encryptedPassword)
 
@@ -51,14 +54,13 @@ const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
       isVerified: false,
       verificationToken,
       verificationTokenExpires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-      provider: "local"
+      provider: "local",
+      profile: { firstName, lastName, email },
     });
 
-     await newUser.save();
+    await newUser.save();
 
-    await SendMailVerification(email, verificationToken)
-
-   
+    await SendMailVerification(email, verificationToken);
 
     // const userWithoutPassword = {
     //   ...user.toObject(),
@@ -70,12 +72,15 @@ const SignUp = async (req: Request<{}, {}, SignUpBody>, res: Response) => {
     //   message: "New user created",
     //   user: userWithoutPassword,
     // });
-    return res.status(StatusCodes.CREATED).json({success: true, message: "Registration successful. Please check your email to verify"})
+    return res.status(StatusCodes.CREATED).json({
+      success: true,
+      message: "Registration successful. Please check your email to verify",
+    });
   } catch (error) {
     if (error instanceof Error)
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ success: false, message: error.message });
+      return res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ success: false, message: error.message });
     // console.log("An error occurred: ", error);
   }
 };
