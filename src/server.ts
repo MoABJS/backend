@@ -11,6 +11,7 @@ import passport from "passport";
 import "./config/google_passport";
 
 export const app = express();
+app.use(passport.initialize());
 
 app.use(
   cors({
@@ -25,10 +26,11 @@ app.use(cookieParser());
 connectToDB();
 
 app.use("/api", routes);
-app.use(passport.initialize());
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
+
+console.log(PORT);
 
 app.listen(PORT, () => {
-  console.log("server is running on port 3000");
+  console.log(`server is running on port ${PORT}`);
 });

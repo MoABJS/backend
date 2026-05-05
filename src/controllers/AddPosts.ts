@@ -17,7 +17,7 @@ const addPosts = async (req: Request, res: Response) => {
       });
     }
 
-    const imageUrl = await uploadImage(req.file.buffer);
+    const imageUrl = await uploadImage(req.file.buffer, "postsImages");
 
     const newPost = new postModel({
       itemName,

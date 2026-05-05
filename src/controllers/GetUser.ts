@@ -22,7 +22,7 @@ const getUser = async (req: Request, res: Response) => {
       });
     }
 
-    console.log("get user", user);
+    // console.log("get user", user);
 
     return res.status(StatusCodes.OK).json({
       success: true,

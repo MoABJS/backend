@@ -1,9 +1,12 @@
 import cloudinary from "../config/cloudinary";
 
-const uploadImage = async (fileBuffer: Buffer): Promise<string> => {
+const uploadImage = async (
+  fileBuffer: Buffer,
+  folder: string,
+): Promise<string> => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
-      { folder: "postsImages", resource_type: "image" },
+      { folder: folder, resource_type: "image" },
       (error, result) => {
         if (error || !result) {
           return reject(error || new Error("Cloudinary upload failed"));
