@@ -30,6 +30,7 @@ const updateUserProfile = async (req: Request, res: Response) => {
     }
 
     Object.entries(req.body).forEach(([key, value]) => {
+      //   console.log(`${key}: ${value}`);
       if (!allowedFields.includes(key)) return;
       updateData[`profile.${key}`] = value;
     });
@@ -53,6 +54,8 @@ const updateUserProfile = async (req: Request, res: Response) => {
         message: "User not found",
       });
     }
+
+    console.log("updated user", updatedUser);
 
     return res.status(200).json({
       success: true,

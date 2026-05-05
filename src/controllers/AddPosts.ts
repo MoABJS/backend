@@ -35,6 +35,7 @@ const addPosts = async (req: Request, res: Response) => {
     return res.status(StatusCodes.OK).json({
       success: true,
       message: "Post created",
+      post: newPost,
     });
   } catch (error) {
     if (error instanceof Error) {

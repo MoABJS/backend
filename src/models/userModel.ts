@@ -36,7 +36,7 @@ const profileSchema = new mongoose.Schema(
     area: {
       type: String,
     },
-    phoneNumber: {
+    phone: {
       type: String,
     },
     program: {
