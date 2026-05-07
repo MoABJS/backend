@@ -7,13 +7,13 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      callbackURL: "/api/auth/google/callback",
+      callbackURL: "http://localhost:5000/api/auth/google/callback",
     },
     async (
       accessToken: string,
       refreshToken: string,
       profile: Profile,
-      done
+      done,
     ) => {
       try {
         const email = profile.emails?.[0].value;
@@ -46,13 +46,13 @@ passport.use(
           googleId,
           password: undefined, // no password for Google users
           isVerified: true,
-          provider: "google"
+          provider: "google",
         });
 
         return done(null, newUser);
       } catch (error) {
         return done(error as any, undefined);
       }
-    }
-  )
+    },
+  ),
 );

@@ -92,7 +92,7 @@ router.get(
     });
 
     // Or redirect to frontend
-    res.redirect("http://localhost:5173"); // your frontend URL
+    res.redirect("http://localhost:5173/dashboard"); // your frontend URL
   },
 );
 
