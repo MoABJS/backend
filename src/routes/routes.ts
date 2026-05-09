@@ -51,7 +51,7 @@ router.get("/users/:userId", getUser);
 
 router.patch("/posts/:id", jwtAuthorization, UpdatePostStatus);
 router.get("/auth/verify-email", VerifyEmail);
-router.post("/sign-out", jwtAuthorization, SignOut);
+router.post("/sign-out", SignOut);
 router.post(
   "/add-post",
   jwtAuthorization,

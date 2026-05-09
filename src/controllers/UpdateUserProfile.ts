@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import uploadImage from "../middlewares/uploadImage";
 import userModel from "../models/userModel";
+import { io } from "../server";
 
 const allowedFields = [
   "firstName",
@@ -56,6 +57,8 @@ const updateUserProfile = async (req: Request, res: Response) => {
     }
 
     console.log("updated user", updatedUser);
+
+    io.emit("user-updated");
 
     return res.status(200).json({
       success: true,

@@ -2,6 +2,7 @@ import { Response, Request } from "express";
 import postModel from "../models/postModel";
 import { StatusCodes } from "http-status-codes";
 import uploadImage from "../middlewares/uploadImage";
+import { io } from "../server";
 
 const addPosts = async (req: Request, res: Response) => {
   try {
@@ -31,6 +32,8 @@ const addPosts = async (req: Request, res: Response) => {
     });
 
     await newPost.save();
+
+    io.emit("new-post", newPost);
 
     return res.status(StatusCodes.OK).json({
       success: true,

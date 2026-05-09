@@ -47,6 +47,7 @@ passport.use(
           password: undefined, // no password for Google users
           isVerified: true,
           provider: "google",
+          profile: { firstName, lastName, email },
         });
 
         return done(null, newUser);

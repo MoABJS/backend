@@ -74,6 +74,7 @@ const SignIn = async (req: Request<{}, {}, SignInBody>, res: Response) => {
         isVerified: isUser.isVerified,
         firstName: isUser.firstName,
         lastName: isUser.lastName,
+        profile: isUser.profile,
       },
     });
   } catch (error) {

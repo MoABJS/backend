@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import mongoose from "mongoose";
 import postModel from "../models/postModel";
 import { AuthPayload } from "../types/auth";
+import { io } from "../server";
 
 const allowedStatuses = ["pending", "approved", "rejected", "reunited"];
 
@@ -47,6 +48,8 @@ const UpdatePostStatus = async (req: Request, res: Response) => {
 
     post.postStatus = postStatus;
     await post.save();
+
+    io.emit("post-updated");
 
     return res
       .status(StatusCodes.OK)
