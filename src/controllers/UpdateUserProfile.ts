@@ -58,7 +58,7 @@ const updateUserProfile = async (req: Request, res: Response) => {
 
     console.log("updated user", updatedUser);
 
-    io.emit("user-updated");
+    io.emit("user-updated", updatedUser);
 
     return res.status(200).json({
       success: true,

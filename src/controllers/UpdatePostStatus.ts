@@ -25,8 +25,10 @@ const UpdatePostStatus = async (req: Request, res: Response) => {
       });
     }
 
-    const post = await postModel.findById(id);
-    if (!post) {
+    const updatedPost = await postModel.findByIdAndUpdate(id, {
+      postStatus: postStatus,
+    });
+    if (!updatedPost) {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
         message: "Post not found",
@@ -40,16 +42,13 @@ const UpdatePostStatus = async (req: Request, res: Response) => {
         .json({ success: false, message: "Unauthorized" });
     }
 
-    if (requesterId !== post.userId.toString()) {
+    if (requesterId !== updatedPost.userId.toString()) {
       return res
         .status(StatusCodes.FORBIDDEN)
         .json({ success: false, message: "Not allowed" });
     }
 
-    post.postStatus = postStatus;
-    await post.save();
-
-    io.emit("post-updated");
+    io.emit("post-updated", updatedPost);
 
     return res
       .status(StatusCodes.OK)
